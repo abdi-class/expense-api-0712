@@ -1,9 +1,11 @@
-import fs from "fs";
+import { Pool } from "pg";
 
-export const readDB = () => {
-  return JSON.parse(fs.readFileSync("./db.json").toString());
-};
+const poolDB = new Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "expense_tracker",
+  password: "qweasd",
+  port: 5433,
+});
 
-export const writeDB = (data: any) => {
-  return fs.writeFileSync("./db.json", JSON.stringify(data, null, 4));
-};
+export default poolDB;
