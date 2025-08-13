@@ -3,9 +3,17 @@ import { prisma } from "../config/prisma";
 
 export const getData = async (req: Request, res: Response) => {
   try {
+    const filterData: any = {};
+    if (req.query.title) {
+      filterData.title = req.query.title;
+    }
     const transactions = await prisma.transactions.findMany({
+      where: filterData,
       include: {
         Categories: true,
+      },
+      omit: {
+        categoryId: true,
       },
     });
 
