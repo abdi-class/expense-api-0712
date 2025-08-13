@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addData,
   getByCategory,
   getByDate,
   getData,
@@ -8,6 +9,7 @@ import {
 const route: Router = Router();
 
 route.get("/", getData);
+route.post("/add", addData);
 route.get("/by-category/:category", getByCategory);
 route.get("/by-date/:start/:end", getByDate);
 

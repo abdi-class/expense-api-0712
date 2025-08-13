@@ -10,6 +10,30 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Categories {
+  id           Int            @id @default(autoincrement())
+  name         String
+  type         CategoryType
+  Transactions Transactions[]
+}
+
+enum CategoryType {
+  income
+  expense
+}
+
+model Transactions {
+  id         Int      @id @default(autoincrement())
+  title      String
+  nominal    Int
+  date       DateTime
+  categoryId Int
+
+  // define relation
+  Categories Categories @relation(fields: [categoryId], references: [id])
 }

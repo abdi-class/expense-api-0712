@@ -1,17 +1,30 @@
 import { Request, Response } from "express";
-import poolDB from "../config/db";
+import { prisma } from "../config/prisma";
 
 export const getData = async (req: Request, res: Response) => {
   try {
-    const sqlScript = "select * from transactions order by id asc;";
-    const data = await poolDB.query(sqlScript);
+    const transactions = await prisma.transactions.findMany({
+      include: {
+        Categories: true,
+      },
+    });
 
-    console.log(data);
-
-    res.status(200).send(data.rows);
+    res.status(200).send(transactions);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
+  }
+};
+
+export const addData = async (req: Request, res: Response) => {
+  try {
+    const newData = await prisma.transactions.create({
+      data: { ...req.body, date: new Date(req.body.date) },
+    });
+
+    res.status(200).send(newData);
+  } catch (error) {
+    console.log(error);
   }
 };
 
